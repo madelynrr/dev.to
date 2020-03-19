@@ -1,27 +1,38 @@
 class Article < ApplicationRecord
+  # imports modules
   include CloudinaryHelper
   include ActionView::Helpers
   include AlgoliaSearch
   include Storext.model
   include Reactable
 
+  # uses acts_on_taggable_gem to create virtual tags on articles
   acts_as_taggable_on :tags
   resourcify
 
+  # allows read and write permission for publish_under_org method
   attr_accessor :publish_under_org
+
+  # allows write permission for series method
   attr_writer :series
 
+  # allows article to access and user User model's name and username attributes
   delegate :name, to: :user, prefix: true
   delegate :username, to: :user, prefix: true
 
+  # tells database what an article belongs to, must belong to user, optionally to job_opportunity, organization, and collection
   belongs_to :user
   belongs_to :job_opportunity, optional: true
   belongs_to :organization, optional: true
   belongs_to :collection, optional: true, touch: true
 
+  # COME BACK LATER
   counter_culture :user
   counter_culture :organization
 
+  # tells database what an article has
+  # aliases comments, profile_pins, notifications, and notification_subscriptions; also adds inverse_of to these aliases to save a database call for the article to which they belong
+  # adds dependent delete all/destroy for notifications/notification_subscriptions, buffer_updates
   has_many :comments, as: :commentable, inverse_of: :commentable
   has_many :profile_pins, as: :pinnable, inverse_of: :pinnable
   has_many :buffer_updates, dependent: :destroy
@@ -30,6 +41,7 @@ class Article < ApplicationRecord
   has_many :rating_votes
   has_many :page_views
 
+  # adds validations
   validates :slug, presence: { if: :published? }, format: /\A[0-9a-z\-_]*\z/,
                    uniqueness: { scope: :user_id }
   validates :title, presence: true,
@@ -40,6 +52,8 @@ class Article < ApplicationRecord
             url: { allow_blank: true, no_local: true, schemes: %w[https http] },
             uniqueness: { allow_blank: true }
   validates :body_markdown, length: { minimum: 0, allow_nil: false }, uniqueness: { scope: %i[user_id title] }
+
+  # call on helper methods for more complex/specific validations
   validate :validate_tag
   validate :validate_video
   validate :validate_collection_permission
@@ -56,26 +70,39 @@ class Article < ApplicationRecord
   validates :video_closed_caption_track_url, url: { allow_blank: true, schemes: ["https"] }
   validates :video_source_url, url: { allow_blank: true, schemes: ["https"] }
 
+  # COME BACK LATER
   after_update_commit :update_notifications, if: proc { |article| article.notifications.any? && !article.saved_changes.empty? }
+
+  # run evaluate_markdown and create_slug helper methods before validations
   before_validation :evaluate_markdown
   before_validation :create_slug
+
+  # run create_password before creating
   before_create     :create_password
+
+  # run these helper methods before saving
   before_save       :set_all_dates
   before_save       :calculate_base_scores
   before_save       :set_caches
   before_save       :fetch_video_duration
   before_save       :clean_data
-  after_commit      :async_score_calc
-  after_save        :bust_cache
-  after_commit      :update_main_image_background_hex
-  after_save        :detect_human_language
   before_save       :update_cached_user
+
+  # run these helper methods after saving (after_save and after_commit look very similar...)
+  after_commit      :async_score_calc
+  after_commit      :update_main_image_background_hex
+  after_save        :bust_cache
+  after_save        :detect_human_language
+
+  # run this helper method before destroying
   before_destroy    :before_destroy_actions, prepend: true
 
+  # serializes these attributes before storing in database
   serialize :ids_for_suggested_articles
   serialize :cached_user
   serialize :cached_organization
 
+  # setting scopes/helper methods for SQL queries
   scope :published, -> { where(published: true) }
   scope :unpublished, -> { where(published: false) }
 
