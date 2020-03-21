@@ -80,6 +80,7 @@ export class ReadingList extends Component {
 
   // A method that determines statusView in state as either valid or archived
   toggleStatusView = event => {
+    // prevents automatic refresh before event can be recorded
     event.preventDefault();
 
     // destructures query and selectedTags from state (const query = this.state.query)
@@ -110,6 +111,7 @@ export class ReadingList extends Component {
 
   // a method that toggles an item's archived status - the item that needs to be archived is passed in as an argument
   toggleArchiveStatus = (event, item) => {
+    // prevents automatic refresh before event can be recorded
     event.preventDefault();
 
     // destructuring statusView, items, and totalCount from state
