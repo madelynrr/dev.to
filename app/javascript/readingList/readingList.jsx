@@ -41,7 +41,7 @@ const FilterText = ({ selectedTags, query, value }) => {
   );
 };
 
-//Finally getting to the main event - the ReadingList Component - its a class component (has state, methods) which is why we need that 'extends Component' part
+// Finally getting to the main event - the ReadingList Component - its a class component (has state, methods) which is why we need that 'extends Component' part
 export class ReadingList extends Component {
   constructor(props) {
     super(props);
@@ -193,7 +193,6 @@ export class ReadingList extends Component {
 
   // every class component has a render method
   render() {
-
     // destructures most of state
     const {
       items,
@@ -233,17 +232,22 @@ export class ReadingList extends Component {
     );
 
     // the jsx that is being rendered
+    // 247 : input used to search reading list
+    // 251 : displays a list of the user's selected tags and button to clear the tags
+    // 268 : seems that these are the cumalitive tags from all the reading list items, while the tags in the section just above are the tags a user is selecting to search/filter of reading list items
+    // 274 : if you are currently viewing the reading list, you can click this to view the archive, and visa versa
+    // 284 : where the reading list items are actually displayed
+    // 294 : button component that allows you to load more reading list items once you have reached the bottom of the page
+    // 299 : where the snack bar (floating message) lives on the item
     return (
       <div className="home item-list">
         <div className="side-bar">
           <div className="widget filters">
-          // input used to search reading list
             <input
               onKeyUp={this.onSearchBoxType}
               placeHolder="search your list"
             />
             <div className="filters-header">
-              // displays a list of the user's selected tags and button to clear the tags
               <h4 className="filters-header-text">my tags</h4>
               {Boolean(selectedTags.length) && (
                 <a
@@ -260,14 +264,11 @@ export class ReadingList extends Component {
                 </a>
               )}
             </div>
-            // seems that these are the cumalitive tags from all the reading list items, while the tags in the section just above (245-257) are the tags a user is selecting to search/filter of reading list items
             <ItemListTags
               availableTags={availableTags}
               selectedTags={selectedTags}
               onClick={this.toggleTag}
             />
-
-            // if you are currently viewing the reading list, you can click this to view the archive, and visa versa
             <div className="status-view-toggle">
               <a
                 href={READING_LIST_ARCHIVE_PATH}
@@ -279,8 +280,6 @@ export class ReadingList extends Component {
             </div>
           </div>
         </div>
-
-        // where the reading list items are actually displayed
         <div className="items-container">
           <div className={`results ${itemsLoaded ? 'results--loaded' : ''}`}>
             <div className="results-header">
@@ -291,15 +290,11 @@ export class ReadingList extends Component {
               {items.length > 0 ? itemsToRender : this.renderEmptyItems()}
             </div>
           </div>
-
-          // button component that allows you to load more reading list items once you have reached the bottom of the page
           <ItemListLoadMoreButton
             show={showLoadMoreButton}
             onClick={this.loadNextPage}
           />
         </div>
-
-        // where the snack bar (floating message) lives on the item
         {snackBar}
       </div>
     );
