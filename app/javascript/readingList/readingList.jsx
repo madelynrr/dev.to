@@ -1,7 +1,12 @@
+// Tells babel to use h for JSX, brings Component to build out
 import { h, Component } from 'preact';
+// Imports PropTypes to double check that the data types you are expecting to receive
+// through props are the ones you are getting.
 import { PropTypes } from 'preact-compat';
+// Imports debounce gto improve browser performance
 import debounce from 'lodash.debounce';
 
+// Imports several functions from the searchableItemsList File
 import {
   defaultState,
   loadNextPage,
@@ -11,16 +16,22 @@ import {
   toggleTag,
   clearSelectedTags,
 } from '../searchableItemList/searchableItemList';
+
+// Imports all of the components included in the ItemList folder
 import { ItemListItem } from '../src/components/ItemList/ItemListItem';
 import { ItemListItemArchiveButton } from '../src/components/ItemList/ItemListItemArchiveButton';
 import { ItemListLoadMoreButton } from '../src/components/ItemList/ItemListLoadMoreButton';
 import { ItemListTags } from '../src/components/ItemList/ItemListTags';
-
+// Setting default prop StatusViewValid or STATUS_VIEW_ARCHIVED
 const STATUS_VIEW_VALID = 'valid';
 const STATUS_VIEW_ARCHIVED = 'archived';
+// Sets up the two potentail paths for the reading list
 const READING_LIST_ARCHIVE_PATH = '/readinglist/archive';
 const READING_LIST_PATH = '/readinglist';
 
+// A functional component called FilterText that has selectedTags, query,
+// and value props passed to it (not known from where), checks for selectedTags and
+// query array lengths and returns either the value or a message ('Nothing with this filter')
 const FilterText = ({ selectedTags, query, value }) => {
   return (
     <h1>
@@ -30,15 +41,18 @@ const FilterText = ({ selectedTags, query, value }) => {
     </h1>
   );
 };
-
+// Readlinglist class component (has state/methods) which is why it needs the extends component
 export class ReadingList extends Component {
   constructor(props) {
     super(props);
 
+    // destructure the two props passed from packs/readinglist.jsx file through the loadElement function (equivalent to const availableTags = this.props.availableTags),
+    // then adds a default state using passed down props and an 'archiving: false' key/value
     const { availableTags, statusView } = this.props;
     this.state = defaultState({ availableTags, archiving: false, statusView });
 
     // bind and initialize all shared functions
+    // these are the functions that were imported on lines 9-17
     this.onSearchBoxType = debounce(onSearchBoxType.bind(this), 300, {
       leading: true,
     });
@@ -49,6 +63,8 @@ export class ReadingList extends Component {
     this.clearSelectedTags = clearSelectedTags.bind(this);
   }
 
+  // On componentDidMount (basically whenever the component renders), it destructures hitsPerPage and statusView from state (equivalent to const hitsPerPage = this.state.hitsPerPage)
+  // It also executes the imported performInitialSearch function, which seems to set ReadingList state with search results
   componentDidMount() {
     const { hitsPerPage, statusView } = this.state;
 
@@ -62,11 +78,13 @@ export class ReadingList extends Component {
     });
   }
 
+  // A method that determines statusView in state as either valid or archived
   toggleStatusView = event => {
+    // prevents automatic refresh before event can be recorded
     event.preventDefault();
-
+    // destructures query and selectedTags from state (const query = this.state.query)
     const { query, selectedTags } = this.state;
-
+    // determines if status is valid or archived and the resulting path
     const isStatusViewValid = this.statusViewValid();
     const newStatusView = isStatusViewValid
       ? STATUS_VIEW_ARCHIVED
@@ -77,7 +95,7 @@ export class ReadingList extends Component {
 
     // empty items so that changing the view will start from scratch
     this.setState({ statusView: newStatusView, items: [] });
-
+    // executes the imported search function that returns results after searching in index
     this.search(query, {
       page: 0,
       tags: selectedTags,
@@ -88,10 +106,13 @@ export class ReadingList extends Component {
     window.history.replaceState(null, null, newPath);
   };
 
+  // a method that toggles an item's archived status - the item that needs to be archived is passed in as an argument
   toggleArchiveStatus = (event, item) => {
+    // prevents automatic refresh before event can be recorded
     event.preventDefault();
-
+    // destructuring statusView, items, and totalCount from state
     const { statusView, items, totalCount } = this.state;
+    // sends PUT request to the url referencing the specific item and its archived status
     window.fetch(`/reading_list_items/${item.id}`, {
       method: 'PUT',
       headers: {
@@ -101,7 +122,7 @@ export class ReadingList extends Component {
       body: JSON.stringify({ current_status: statusView }),
       credentials: 'same-origin',
     });
-
+    // removes the archived item from newItems and updates the totalCount in state
     const t = this;
     const newItems = items;
     newItems.splice(newItems.indexOf(item), 1);
@@ -117,14 +138,16 @@ export class ReadingList extends Component {
     }, 1000);
   };
 
+  // returns state's statusView if valid
   statusViewValid() {
     const { statusView } = this.state;
     return statusView === STATUS_VIEW_VALID;
   }
 
+  // method that returns relevant messaging if you don't have any items saved to your reading list yet, or if viewing the archived list, you don't have anything archived
   renderEmptyItems() {
     const { itemsLoaded, selectedTags, query } = this.state;
-
+    // messaging for an empty reading list
     if (itemsLoaded && this.statusViewValid()) {
       return (
         <div className="items-empty">
@@ -148,7 +171,7 @@ export class ReadingList extends Component {
         </div>
       );
     }
-
+    // messaging for archived items
     return (
       <div className="items-empty">
         <FilterText
@@ -160,7 +183,9 @@ export class ReadingList extends Component {
     );
   }
 
+  // every class component has a render method
   render() {
+    // destructures most of state
     const {
       items,
       itemsLoaded,
@@ -170,10 +195,11 @@ export class ReadingList extends Component {
       showLoadMoreButton,
       archiving,
     } = this.state;
-
+    // determines archived status
     const isStatusViewValid = this.statusViewValid();
-
+    // determines if the button on ItemListItem (worst name ever) component should say archive or unarchive
     const archiveButtonLabel = isStatusViewValid ? 'archive' : 'unarchive';
+    // creates an ItemListItem component for each reading list item
     const itemsToRender = items.map(item => {
       return (
         <ItemListItem item={item}>
@@ -184,7 +210,7 @@ export class ReadingList extends Component {
         </ItemListItem>
       );
     });
-
+    // a snackbar is basically a floating message - in this case, depending on archive status, determines what that floating message should be while in the process of archiving/unarchiving
     const snackBar = archiving ? (
       <div className="snackbar">
         {isStatusViewValid ? 'Archiving...' : 'Unarchiving...'}
@@ -192,6 +218,14 @@ export class ReadingList extends Component {
     ) : (
       ''
     );
+    // the jsx that is being rendered
+    // 247 : input used to search reading list
+    // 251 : displays a list of the user's selected tags and button to clear the tags
+    // 268 : seems that these are the cumalitive tags from all the reading list items, while the tags in the section just above are the tags a user is selecting to search/filter of reading list items
+    // 274 : if you are currently viewing the reading list, you can click this to view the archive, and visa versa
+    // 284 : where the reading list items are actually displayed
+    // 294 : button component that allows you to load more reading list items once you have reached the bottom of the page
+    // 299 : where the snack bar (floating message) lives on the item
     return (
       <div className="home item-list">
         <div className="side-bar">
@@ -257,11 +291,11 @@ export class ReadingList extends Component {
     );
   }
 }
-
+// checks the data types of ReadingList's default props or properties
 ReadingList.defaultProps = {
   statusView: STATUS_VIEW_VALID,
 };
-
+// checks the data types of ReadingList's props
 ReadingList.propTypes = {
   availableTags: PropTypes.arrayOf(PropTypes.string).isRequired,
   statusView: PropTypes.oneOf([STATUS_VIEW_VALID, STATUS_VIEW_ARCHIVED]),
