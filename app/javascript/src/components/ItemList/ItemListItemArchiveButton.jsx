@@ -8,7 +8,7 @@
 import { h } from 'preact';
 import { PropTypes } from 'preact-compat';
 
-// creates functional component ItemListItemArchiveButton with text and onClick props passed down
+// creates functional component ItemListItemArchiveButton with text and onClick props passed down 
 export const ItemListItemArchiveButton = ({ text, onClick }) => {
   // allows a user hitting the enter key to function as a click
   const onKeyUp = e => {
