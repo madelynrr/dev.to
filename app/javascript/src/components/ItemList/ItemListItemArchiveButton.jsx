@@ -8,7 +8,9 @@
 import { h } from 'preact';
 import { PropTypes } from 'preact-compat';
 
+// creates functional component ItemListItemArchiveButton with text and onClick props passed down
 export const ItemListItemArchiveButton = ({ text, onClick }) => {
+  // allows a user hitting the enter key to function as a click
   const onKeyUp = e => {
     if (e.key === 'Enter') {
       onClick(e);
@@ -17,6 +19,7 @@ export const ItemListItemArchiveButton = ({ text, onClick }) => {
 
   return (
     // eslint-disable-next-line jsx-a11y/anchor-is-valid
+    // returns a link that either says archive or unarchive based on the text passed down by ReadingList
     <a
       className="archive-button"
       onClick={onClick}
@@ -30,6 +33,7 @@ export const ItemListItemArchiveButton = ({ text, onClick }) => {
   );
 };
 
+// checks that the data types passed in as props are as expected
 ItemListItemArchiveButton.propTypes = {
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
