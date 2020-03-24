@@ -15,13 +15,26 @@ const getWaitOnUserDataHandler = ({ resolve, reject, waitTime = 20 }) => {
       return;
     }
 
-    const csrfToken = getCsrfToken(document);
+    //   const csrfToken = getCsrfToken(document);
+    //   const { user } = document.body.dataset;
+    //
+    //   if (user && csrfToken !== undefined) {
+    //     const currentUser = JSON.parse(user);
+    //
+    //     resolve({ currentUser, csrfToken });
+    //     return;
+    //   }
+    //
+    //   totalTimeWaiting += waitTime;
+    //   setTimeout(waitingOnUserData, waitTime);
+    // };
+
     const { user } = document.body.dataset;
 
-    if (user && csrfToken !== undefined) {
+    if (user !== undefined) {
       const currentUser = JSON.parse(user);
 
-      resolve({ currentUser, csrfToken });
+      resolve({ currentUser });
       return;
     }
 
