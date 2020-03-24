@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import { PropTypes } from 'preact-compat';
 import debounce from 'lodash.debounce';
+import { CollectionForm } from '../collection-form/collectionForm';
 
 import {
   defaultState,
@@ -192,6 +193,7 @@ export class ReadingList extends Component {
     ) : (
       ''
     );
+
     return (
       <div className="home item-list">
         <div className="side-bar">
@@ -233,6 +235,11 @@ export class ReadingList extends Component {
               </a>
             </div>
           </div>
+          <CollectionForm
+            key={Date.now()}
+            _topLevelWrapper=""
+            userTags={availableTags}
+          />
         </div>
 
         <div className="items-container">
