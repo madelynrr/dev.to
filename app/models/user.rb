@@ -59,6 +59,7 @@ class User < ApplicationRecord
   has_one :pro_membership, dependent: :destroy
   has_one :counters, class_name: "UserCounter", dependent: :destroy
   has_many :created_podcasts, class_name: "Podcast", foreign_key: :creator_id, inverse_of: :creator, dependent: :nullify
+  has_many :collection_lists, dependent: :destroy
 
   mount_uploader :profile_image, ProfileImageUploader
 
