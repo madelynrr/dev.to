@@ -4,31 +4,39 @@ import { PropTypes } from 'preact-compat';
 export class CollectionForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { tags: [], title: '' };
+    this.state = { collectionTags: [], allTags: [], title: '' , ready: false};
   }
 
   componentDidMount() {
+    console.log('here1')
     this.fetchAllTags();
   }
 
   fetchAllTags = () => {
     fetch('https://dev.to/api/tags')
       .then(response => response.json())
-      .then(tags => this.setState({ allTags: tags }))
+      .then(tags => this.createTagArray(tags))
+      .then(() => this.setState({ready: true}))
       .catch(error => console.log(error));
   };
+
+  createTagArray = tags => {
+    console.log('here')
+    const { userTags } = this.props;
+    this.setState({allTags: userTags.concat(tags.map(tag => tag.name))});
+  }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
   handleNewTag = event => {
-    this.setState({ tags: [...this.state.tags, event.target.value] });
+    this.setState({ tags: [...this.state.collectionTags, event.target.value] });
   };
 
   createCollection = event => {
     event.preventDefault();
-    this.postCollection({ tags: this.state.tags, title: this.state.title });
+    this.postCollection({ tag_list: this.state.collectionTags, name: this.state.title });
     this.clearState();
   };
 
@@ -56,10 +64,8 @@ export class CollectionForm extends Component {
   };
 
   render() {
-    const { userTags } = this.props;
-    // const orderedTags = userTags.concat(this.state.allTags.map(tag => tag.name));
-
     return (
+      !this.state.ready ? "Loading..." :
       <form className="collection-form">
         <h3>Create A Collection</h3>
         <input
@@ -75,12 +81,12 @@ export class CollectionForm extends Component {
           onChange={this.handlePropertyChange}
         >
           <option>Select Tags...</option>
-          {userTags.map(tag => (
+          {this.state.allTags.map(tag => (
             <option value={tag}>{tag}</option>
           ))}
         </select>
         <p className="select-multiple-msg">
-          Hold shift and click to select multiple.
+          Shift + click to select multiple tags.
         </p>
         <button id="create-collection-btn" onClick={this.createCollection}>
           Create
