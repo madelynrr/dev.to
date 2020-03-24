@@ -234,8 +234,12 @@ export class ReadingList extends Component {
                 {isStatusViewValid ? 'View Archive' : 'View Reading List'}
               </a>
             </div>
-            <CollectionForm userTags={availableTags} />
           </div>
+          <CollectionForm
+            key={Date.now()}
+            _topLevelWrapper=""
+            userTags={availableTags}
+          />
         </div>
 
         <div className="items-container">
