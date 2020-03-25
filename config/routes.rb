@@ -144,7 +144,7 @@ Rails.application.routes.draw do
     end
 
     namespace :v1 do
-      post "/collection_lists", to: "collection_lists#create"
+      post "/collectionlists", to: "collection_lists#create"
     end
   end
 
