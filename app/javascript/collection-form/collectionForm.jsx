@@ -8,7 +8,6 @@ export class CollectionForm extends Component {
   }
 
   componentDidMount() {
-    console.log('here1')
     this.fetchAllTags();
   }
 
@@ -21,7 +20,6 @@ export class CollectionForm extends Component {
   };
 
   createTagArray = tags => {
-    console.log('here')
     const { userTags } = this.props;
     this.setState({allTags: userTags.concat(tags.map(tag => tag.name))});
   }
@@ -45,11 +43,13 @@ export class CollectionForm extends Component {
       method: 'POST',
       body: JSON.stringify(collection),
       headers: {
+        Accept: 'application/json',
+        'X-CSRF-Token': window.csrfToken,
         'Content-Type': 'application/json',
       },
     };
 
-    return fetch('http://localhost:3001/api/v1/collectionlists', options)
+    return fetch('http://localhost:3000/api/v1/collectionlists', options)
       .then(response => {
         if (!response.ok) {
           throw Error('Error posting');
