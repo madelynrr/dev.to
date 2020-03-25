@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_27_214321) do
+ActiveRecord::Schema.define(version: 2020_03_24_014236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -291,6 +291,23 @@ ActiveRecord::Schema.define(version: 2020_02_27_214321) do
     t.bigint "user_id"
     t.index ["organization_id"], name: "index_classified_listings_on_organization_id"
     t.index ["user_id"], name: "index_classified_listings_on_user_id"
+  end
+
+  create_table "collection_list_articles", force: :cascade do |t|
+    t.bigint "article_id"
+    t.bigint "collection_list_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_collection_list_articles_on_article_id"
+    t.index ["collection_list_id"], name: "index_collection_list_articles_on_collection_list_id"
+  end
+
+  create_table "collection_lists", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_collection_lists_on_user_id"
   end
 
   create_table "collections", id: :serial, force: :cascade do |t|
@@ -1215,6 +1232,9 @@ ActiveRecord::Schema.define(version: 2020_02_27_214321) do
   add_foreign_key "chat_channel_memberships", "chat_channels"
   add_foreign_key "chat_channel_memberships", "users"
   add_foreign_key "classified_listings", "users", on_delete: :cascade
+  add_foreign_key "collection_list_articles", "articles"
+  add_foreign_key "collection_list_articles", "collection_lists"
+  add_foreign_key "collection_lists", "users"
   add_foreign_key "identities", "users", on_delete: :cascade
   add_foreign_key "messages", "chat_channels"
   add_foreign_key "messages", "users"
