@@ -10,18 +10,20 @@ RSpec.describe API do
     end
 
     it "can create a collection list" do
+      article = Article.first
+
       params = { name: "Javascript",
-                 tag_list: ["Javascript"] }
+                 tag_list: article.tag_list }
 
       expect(CollectionList.count).to eq(0)
 
-      post "/api/v1/collection_lists", params: params
+      post "/api/v1/collectionlists", params: params
 
       expect(response).to be_successful
       expect(CollectionList.count).to eq(1)
       data = JSON.parse(response.body)
       expect(data["collections"].first["name"]).to eq("Javascript")
-      expect(data["collections"].first["tag_list"]).to eq(["Javascript"])
+      expect(data["collections"].first["tag_list"]).to eq(article.tag_list)
       # expect(data["name"]).to eq("Javascript")
       # expect(data["tag_list"]).to eq(["Javascript"])
     end
