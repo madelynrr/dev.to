@@ -12,6 +12,7 @@ module Users
       CacheBuster.bust("/#{user.username}")
       user.delete
       Rails.cache.delete("user-destroy-token-#{user.id}")
+      delete_collection_lists
     end
 
     def self.call(*args)
@@ -32,6 +33,10 @@ module Users
 
     def delete_articles
       DeleteArticles.call(user)
+    end
+
+    def delete_collection_lists
+      user.collection_lists.map { |collection| CollectionList.destroy(collection.id) }
     end
   end
 end

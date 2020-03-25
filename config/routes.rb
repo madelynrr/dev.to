@@ -142,6 +142,10 @@ Rails.application.routes.draw do
       get "/analytics/past_day", to: "analytics#past_day"
       get "/analytics/referrers", to: "analytics#referrers"
     end
+
+    namespace :v1 do
+      post "/collectionlists", to: "collection_lists#create"
+    end
   end
 
   namespace :notifications do

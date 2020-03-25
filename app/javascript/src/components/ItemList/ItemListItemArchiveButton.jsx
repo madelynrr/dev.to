@@ -7,7 +7,7 @@
 // handler or `e.stopPropagation` are just ignored
 import { h } from 'preact';
 import { PropTypes } from 'preact-compat';
-
+// creates functional component ItemListItemArchiveButton with text and onClick props passed down
 export const ItemListItemArchiveButton = ({ text, onClick }) => {
   const onKeyUp = e => {
     if (e.key === 'Enter') {
@@ -29,7 +29,7 @@ export const ItemListItemArchiveButton = ({ text, onClick }) => {
     </a>
   );
 };
-
+// checks that the data types passed in as props are as expected
 ItemListItemArchiveButton.propTypes = {
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
