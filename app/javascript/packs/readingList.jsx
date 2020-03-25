@@ -15,6 +15,7 @@ function loadElement() {
       // if there is, renders the ReadingList component with availableTags(specific to the current user) and statusView passed down as props
       render(
         <ReadingList
+          collections={currentUser.collection_lists}
           availableTags={currentUser.followed_tag_names}
           statusView={root.dataset.view}
         />,
