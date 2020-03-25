@@ -5,7 +5,6 @@ class Api::V1::CollectionListsController < ApplicationController
       articles = collection.find_articles
       collection.articles << articles
       render json: { collections: current_user.collection_lists }
-      # render json: { name: collection.name, tag_list: collection.tag_list }
     else
       response.status = 401
     end
