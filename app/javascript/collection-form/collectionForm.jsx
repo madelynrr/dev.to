@@ -29,17 +29,17 @@ export class CollectionForm extends Component {
   };
 
   handleNewTag = event => {
-    this.setState({ tags: [...this.state.collectionTags, event.target.value] });
+    this.setState({ collectionTags: [...this.state.collectionTags, event.target.value] });
   };
 
   createCollection = event => {
     event.preventDefault();
-    this.postCollection({ tag_list: this.state.collectionTags, name: this.state.title });
+    this.postCollection({name: this.state.title, tag_list: this.state.collectionTags });
     this.clearState();
   };
 
   postCollection = collection => {
-    const options = {
+    fetch('/api/v1/collectionlists', {
       method: 'POST',
       body: JSON.stringify(collection),
       headers: {
@@ -47,16 +47,10 @@ export class CollectionForm extends Component {
         'X-CSRF-Token': window.csrfToken,
         'Content-Type': 'application/json',
       },
-    };
-
-    return fetch('http://localhost:3000/api/v1/collectionlists', options)
-      .then(response => {
-        if (!response.ok) {
-          throw Error('Error posting');
-        }
-        return response.json();
-      })
-      .then(collectionData => console.log(collectionData));
+      credentials: 'same-origin',
+    })
+      .then(response => console.log(response.json()))
+      .catch(error => console.log(error));
   };
 
   clearState = () => {
@@ -78,7 +72,7 @@ export class CollectionForm extends Component {
         <select
           className="collection-tags-list"
           multiple
-          onChange={this.handlePropertyChange}
+          onChange={this.handleNewTag}
         >
           <option>Select Tags...</option>
           {this.state.allTags.map(tag => (
