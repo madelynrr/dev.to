@@ -6,6 +6,7 @@ import { PropTypes } from 'preact-compat';
 // Imports debounce gto improve browser performance
 import debounce from 'lodash.debounce';
 import { CollectionForm } from '../collection-form/collectionForm';
+import { SingleCollection } from '../single-collection/singleCollection';
 
 // Imports several functions from the searchableItemsList File
 import {
@@ -47,10 +48,8 @@ export class ReadingList extends Component {
   constructor(props) {
     super(props);
 
-    // destructure the two props passed from packs/readinglist.jsx file through the loadElement function (equivalent to const availableTags = this.props.availableTags),
-    // then adds a default state using passed down props and an 'archiving: false' key/value
-    const { availableTags, statusView } = this.props;
-    this.state = defaultState({ availableTags, archiving: false, statusView });
+    const { availableTags, statusView, collections } = this.props;
+    this.state = defaultState({ availableTags, archiving: false, statusView, collections });
 
     // bind and initialize all shared functions
     // these are the functions that were imported on lines 9-17
@@ -276,9 +275,10 @@ export class ReadingList extends Component {
         </div>
 
         <div className="items-container">
+
           <div className={`results ${itemsLoaded ? 'results--loaded' : ''}`}>
             <div className="results-header">
-              {isStatusViewValid ? 'Reading List' : 'Archive'}
+              {isStatusViewValid ? 'Articles' : 'Archived Articles'}
               {` (${totalCount > 0 ? totalCount : 'empty'})`}
             </div>
             <div>
@@ -291,6 +291,13 @@ export class ReadingList extends Component {
             onClick={this.loadNextPage}
           />
         </div>
+
+        <div className="collections-container">
+          <div className="collections-header">Collections</div>
+            <div>
+              <SingleCollection />
+            </div>
+          </div>
 
         {snackBar}
       </div>
@@ -312,3 +319,8 @@ FilterText.propTypes = {
   value: PropTypes.string.isRequired,
   query: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
+
+
+// <div className="reading-list-header">
+//   {isStatusViewValid ? 'Reading List' : 'Archive'}
+// </div>
