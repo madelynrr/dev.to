@@ -226,6 +226,7 @@ export class ReadingList extends Component {
     // 284 : where the reading list items are actually displayed
     // 294 : button component that allows you to load more reading list items once you have reached the bottom of the page
     // 299 : where the snack bar (floating message) lives on the item
+    console.log(this.state.collection)
     return (
       <div className="home item-list">
         <div className="side-bar">
@@ -294,9 +295,7 @@ export class ReadingList extends Component {
 
         <div className="collections-container">
           <div className="collections-header">Collections</div>
-            <div>
-              <SingleCollection />
-            </div>
+            {this.state.collections ? this.state.collections.map(collection => <SingleCollection name={collection.name} /> ) : <SingleCollection name={'Best of JS'} />}
           </div>
 
         {snackBar}
