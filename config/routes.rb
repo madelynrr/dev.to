@@ -419,4 +419,6 @@ Rails.application.routes.draw do
   root "stories#index"
 end
 
+get "/collection_lists/:id", to: "collection_lists#show"
+
 # rubocop:enable Metrics/BlockLength
