@@ -9,6 +9,15 @@ RSpec.describe "ReadingListItems", type: :request do
 
   before do
     sign_in user
+    create(:article)
+    article = Article.first
+
+    params = { name: "Javascript",
+               tag_list: article.tag_list }
+
+    expect(CollectionList.count).to eq(0)
+
+    post "/api/v1/collectionlists", params: params
   end
 
   describe "GET reading list" do
