@@ -4,7 +4,7 @@ class Api::V1::CollectionListsController < ApplicationController
     if collection.save
       articles = collection.find_articles
       collection.articles << articles
-      render json: { collections: current_user.collection_lists }
+      render json: { collections: current_user.collection_lists.where("created_at >= ?", 1.week.ago.utc) }
     else
       response.status = 401
     end
