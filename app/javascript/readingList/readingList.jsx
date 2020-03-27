@@ -6,7 +6,7 @@ import { PropTypes } from 'preact-compat';
 // Imports debounce gto improve browser performance
 import debounce from 'lodash.debounce';
 import { CollectionForm } from '../collection-form/collectionForm';
-import { SingleCollection } from '../single-collection/singleCollection';
+
 
 // Imports several functions from the searchableItemsList File
 import {
@@ -294,7 +294,12 @@ export class ReadingList extends Component {
 
         <div className="collections-container">
           <div className="collections-header">Collections</div>
-            {this.state.collections ? this.state.collections.map(collection => <SingleCollection name={collection.name} /> ) : <SingleCollection name={'Best of JS'} />}
+            {this.state.collections ? this.state.collections.map(collection =>  <article className="single-collection-preview">
+                  <h2>{name}</h2>
+                </article> ) :
+                <article className="single-collection-preview">
+                  <h2>Best of JS</h2>
+                </article>}
           </div>
 
         {snackBar}
