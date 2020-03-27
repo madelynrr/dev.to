@@ -47,6 +47,7 @@ const FilterText = ({ selectedTags, query, value }) => {
 export class ReadingList extends Component {
   constructor(props) {
     super(props);
+    
     const { availableTags, statusView, collections } = this.props;
     this.state = defaultState({ availableTags, archiving: false, statusView, collections });
 
