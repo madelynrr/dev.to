@@ -47,7 +47,6 @@ const FilterText = ({ selectedTags, query, value }) => {
 export class ReadingList extends Component {
   constructor(props) {
     super(props);
-
     const { availableTags, statusView, collections } = this.props;
     this.state = defaultState({ availableTags, archiving: false, statusView, collections });
 
@@ -294,9 +293,7 @@ export class ReadingList extends Component {
 
         <div className="collections-container">
           <div className="collections-header">Collections</div>
-            <div>
-              <SingleCollection />
-            </div>
+            {this.state.collections ? this.state.collections.map(collection => <SingleCollection name={collection.name} /> ) : <SingleCollection name={'Best of JS'} />}
           </div>
 
         {snackBar}

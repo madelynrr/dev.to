@@ -1,10 +1,10 @@
-import { h } from 'preact';
+import { h} from 'preact';
 // import { PropTypes } from 'preact-compat';
 
-export const SingleCollection = () => {
+export const SingleCollection = ({ name }) => {
   return (
     <article className="single-collection-preview">
-      <h2>Best of JS</h2>
+      <h2>{name}</h2>
     </article>
   );
 };
