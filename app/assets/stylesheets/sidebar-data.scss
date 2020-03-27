@@ -32,6 +32,12 @@
   }
 }
 
+.collection-error {
+  color: red;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
 .collection-tags-list {
   border: var(--theme-container-border, 1px solid #dbdbdb);
   border-radius: 3px;
