@@ -133,6 +133,7 @@ Rails.application.routes.draw do
         get :organizations
         get :podcasts
       end
+
       resources :webhooks, only: %i[index create show destroy]
 
       resources :classified_listings, path: :listings, only: %i[index show create update]
@@ -415,6 +416,7 @@ Rails.application.routes.draw do
       :constraints => { view: /comments|moderate|admin/ }
   get "/:username/:slug" => "stories#show"
   get "/:username" => "stories#index"
+  get "/collection_lists/:id", to: "collection_lists#show"
 
   root "stories#index"
 end
