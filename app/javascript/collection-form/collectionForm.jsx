@@ -34,8 +34,7 @@ export class CollectionForm extends Component {
 
   createCollection = event => {
     event.preventDefault();
-    let values = Object.values(this.state);
-    values.includes('') ? this.setState({error: 'Please add a title and select tags!'}) :
+    !this.state.title || !this.state.collectionTags.length ? this.setState({error: 'Please add a title and select tags!'}) :
     this.postCollection({name: this.state.title, tag_list: this.state.collectionTags });
   };
 
