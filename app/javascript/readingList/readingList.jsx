@@ -47,7 +47,6 @@ const FilterText = ({ selectedTags, query, value }) => {
 export class ReadingList extends Component {
   constructor(props) {
     super(props);
-
     const { availableTags, statusView, collections } = this.props;
     this.state = defaultState({ availableTags, archiving: false, statusView, collections });
 
@@ -226,7 +225,6 @@ export class ReadingList extends Component {
     // 284 : where the reading list items are actually displayed
     // 294 : button component that allows you to load more reading list items once you have reached the bottom of the page
     // 299 : where the snack bar (floating message) lives on the item
-    console.log(this.state.collection)
     return (
       <div className="home item-list">
         <div className="side-bar">

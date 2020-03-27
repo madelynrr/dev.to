@@ -39,17 +39,19 @@ export class CollectionForm extends Component {
   };
 
   postCollection = collection => {
-    fetch('/api/v1/collectionlists', {
+    console.log(window.csrfToken)
+    fetch(`/api/v1/collectionlists`, {
       method: 'POST',
       body: JSON.stringify(collection),
       headers: {
         Accept: 'application/json',
+
         'X-CSRF-Token': window.csrfToken,
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin',
     })
-      .then(response => console.log(response.json()))
+      .then(response => console.log(response))
       .catch(error => console.log(error));
   };
 

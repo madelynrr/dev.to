@@ -47,6 +47,7 @@ exports[`<ReadingList /> renders properly 1`] = `
         </a>
       </div>
     </div>
+    Loading...
   </div>
   <div
     class="items-container"
@@ -57,7 +58,7 @@ exports[`<ReadingList /> renders properly 1`] = `
       <div
         class="results-header"
       >
-        Reading List (empty)
+        Articles (empty)
       </div>
       <div>
         <div
@@ -69,6 +70,22 @@ exports[`<ReadingList /> renders properly 1`] = `
         </div>
       </div>
     </div>
+  </div>
+  <div
+    class="collections-container"
+  >
+    <div
+      class="collections-header"
+    >
+      Collections
+    </div>
+    <article
+      class="single-collection-preview"
+    >
+      <h2>
+        Best of JS
+      </h2>
+    </article>
   </div>
 </div>
 `;
