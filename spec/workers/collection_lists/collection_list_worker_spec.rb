@@ -9,11 +9,11 @@ RSpec.describe CollectionLists::CollectionListWorker, type: :job do
       sleep(3)
       create(:collection_list)
 
-      expect(CollectionList.all).to eq(3)
+      expect(CollectionList.all.count).to eq(3)
 
       worker.perform
 
-      expect(CollectionList.all).to eq(5)
+      expect(CollectionList.all.count).to eq(5)
     end
   end
 end
