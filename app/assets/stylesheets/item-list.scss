@@ -285,4 +285,9 @@
   justify-content: center;
   margin: 10px;
   width: 180px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: darken(rgb(102, 226, 213), 10%);
+  }
 }
