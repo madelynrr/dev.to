@@ -6,6 +6,7 @@ import { PropTypes } from 'preact-compat';
 // Imports debounce gto improve browser performance
 import debounce from 'lodash.debounce';
 import { CollectionForm } from '../collection-form/collectionForm';
+// import { Collections } from '../collections/collections';
 
 
 // Imports several functions from the searchableItemsList File
@@ -30,6 +31,7 @@ const STATUS_VIEW_ARCHIVED = 'archived';
 // Sets up the two potentail paths for the reading list
 const READING_LIST_ARCHIVE_PATH = '/readinglist/archive';
 const READING_LIST_PATH = '/readinglist';
+// const COLLECTION_PATH = "/collection_lists/:id"
 
 // A functional component called FilterText that has selectedTags, query,
 // and value props passed to it (not known from where), checks for selectedTags and
@@ -49,7 +51,7 @@ export class ReadingList extends Component {
     super(props);
     
     const { availableTags, statusView, collections } = this.props;
-    this.state = defaultState({ availableTags, archiving: false, statusView, collections });
+    this.state = defaultState({ availableTags, archiving: false, statusView, collections: [{id: 4, name:'Best of Js', tags: ['javascript'] }]})
 
     // bind and initialize all shared functions
     // these are the functions that were imported on lines 9-17
@@ -67,7 +69,6 @@ export class ReadingList extends Component {
   // It also executes the imported performInitialSearch function, which seems to set ReadingList state with search results
   componentDidMount() {
     const { hitsPerPage, statusView } = this.state;
-
     this.performInitialSearch({
       containerId: 'reading-list',
       indexName: 'SecuredReactions',
@@ -144,10 +145,15 @@ export class ReadingList extends Component {
     return statusView === STATUS_VIEW_VALID;
   }
 
+  // viewCollectionPage() {
+  //   this.setState({statusView: COLLECTION_PATH})
+  // }
+
   // method that returns relevant messaging if you don't have any items saved to your reading list yet, or if viewing the archived list, you don't have anything archived
   renderEmptyItems() {
     const { itemsLoaded, selectedTags, query } = this.state;
     // messaging for an empty reading list
+
     if (itemsLoaded && this.statusViewValid()) {
       return (
         <div className="items-empty">
@@ -226,7 +232,11 @@ export class ReadingList extends Component {
     // 284 : where the reading list items are actually displayed
     // 294 : button component that allows you to load more reading list items once you have reached the bottom of the page
     // 299 : where the snack bar (floating message) lives on the item
+
     return (
+
+      // this.state.statusView === COLLECTION_PATH ? <Collections /> :
+
       <div className="home item-list">
         <div className="side-bar">
           <div className="widget filters">
@@ -260,7 +270,7 @@ export class ReadingList extends Component {
             <div className="status-view-toggle">
               <a
                 href={READING_LIST_ARCHIVE_PATH}
-                onClick={e => this.toggleStatusView(e)}
+                onClick={() => this.toggleStatusView()}
                 data-no-instant
               >
                 {isStatusViewValid ? 'View Archive' : 'View Reading List'}
@@ -294,12 +304,15 @@ export class ReadingList extends Component {
 
         <div className="collections-container">
           <div className="collections-header">Collections</div>
-            {this.state.collections ? this.state.collections.map(collection =>  <article className="single-collection-preview">
-                  <h2>{name}</h2>
-                </article> ) :
+            {this.state.collections ? this.state.collections.map(collection =>
+              <a
+                href={`/collection_lists/${collection.id}`}
+                // onClick={e => this.viewCollectionPage()}
+                data-no-instant
+              >
                 <article className="single-collection-preview">
-                  <h2>Best of JS</h2>
-                </article>}
+                  <h2>{collection.name}</h2>
+                </article></a> ) : <div>meep</div>}
           </div>
 
         {snackBar}
