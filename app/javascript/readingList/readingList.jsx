@@ -140,6 +140,10 @@ export class ReadingList extends Component {
     }, 1000);
   };
 
+  updateCollection = collection => {
+    this.setState({collections: [...this.state.collections, collection]})
+  }
+
   // returns state's statusView if valid
   statusViewValid() {
     const { statusView } = this.state;
@@ -277,6 +281,7 @@ export class ReadingList extends Component {
             key={Date.now()}
             _topLevelWrapper=""
             userTags={availableTags}
+            updateCollection={this.updateCollection}
           />
         </div>
 
@@ -304,8 +309,7 @@ export class ReadingList extends Component {
             {collections ? collections.map(collection =>
               <a
                 className="collection-name"
-                href={`/collection_lists/${collection.id}`}
-                onClick={() => this.viewCollectionPage()}
+                href={`/collectionlists/${collection.id}`}
                 data-no-instant
               >
                 <article className="single-collection-preview">
