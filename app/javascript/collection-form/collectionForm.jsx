@@ -51,7 +51,7 @@ export class CollectionForm extends Component {
       },
       credentials: 'same-origin',
     })
-      .then(response => console.log(response))
+      .then(response => this.props.updateCollection(collection))
       .catch(error => console.log(error));
   };
 
@@ -82,9 +82,9 @@ export class CollectionForm extends Component {
           ))}
         </select>
         <p className="select-multiple-msg">
-          Shift + click to select multiple tags.
+          Command + click to select multiple tags.
         </p>
-        <button id="create-collection-btn" onClick={this.createCollection}>
+        <button type="submit" id="create-collection-btn" onClick={this.createCollection}>
           Create
         </button>
         <p className="collection-error">{this.state.error}</p>
@@ -94,5 +94,6 @@ export class CollectionForm extends Component {
 }
 
 CollectionForm.propTypes = {
-  userTags: PropTypes.array
+  userTags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  updateCollection: PropTypes.func.isRequired,
 };

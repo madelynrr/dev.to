@@ -6,7 +6,8 @@ import { PropTypes } from 'preact-compat';
 // Imports debounce gto improve browser performance
 import debounce from 'lodash.debounce';
 import { CollectionForm } from '../collection-form/collectionForm';
-import { SingleCollection } from '../single-collection/singleCollection';
+// import { Collections } from '../collections/collections';
+
 
 // Imports several functions from the searchableItemsList File
 import {
@@ -30,6 +31,7 @@ const STATUS_VIEW_ARCHIVED = 'archived';
 // Sets up the two potentail paths for the reading list
 const READING_LIST_ARCHIVE_PATH = '/readinglist/archive';
 const READING_LIST_PATH = '/readinglist';
+// const COLLECTION_PATH = "/collection_lists/:id"
 
 // A functional component called FilterText that has selectedTags, query,
 // and value props passed to it (not known from where), checks for selectedTags and
@@ -49,8 +51,7 @@ export class ReadingList extends Component {
     super(props);
     
     const { availableTags, statusView, collections } = this.props;
-    this.state = defaultState({ availableTags, archiving: false, statusView, collections });
-
+    this.state = defaultState({ availableTags, archiving: false, statusView, collections: []})
     // bind and initialize all shared functions
     // these are the functions that were imported on lines 9-17
     this.onSearchBoxType = debounce(onSearchBoxType.bind(this), 300, {
@@ -67,7 +68,6 @@ export class ReadingList extends Component {
   // It also executes the imported performInitialSearch function, which seems to set ReadingList state with search results
   componentDidMount() {
     const { hitsPerPage, statusView } = this.state;
-
     this.performInitialSearch({
       containerId: 'reading-list',
       indexName: 'SecuredReactions',
@@ -76,6 +76,8 @@ export class ReadingList extends Component {
         filters: `status:${statusView}`,
       },
     });
+
+    this.setState({collections: JSON.parse(this.props.collections)})
   }
 
   // A method that determines statusView in state as either valid or archived
@@ -138,6 +140,10 @@ export class ReadingList extends Component {
     }, 1000);
   };
 
+  updateCollection = collection => {
+    this.setState({collections: [...this.state.collections, collection]})
+  }
+
   // returns state's statusView if valid
   statusViewValid() {
     const { statusView } = this.state;
@@ -148,6 +154,7 @@ export class ReadingList extends Component {
   renderEmptyItems() {
     const { itemsLoaded, selectedTags, query } = this.state;
     // messaging for an empty reading list
+
     if (itemsLoaded && this.statusViewValid()) {
       return (
         <div className="items-empty">
@@ -187,6 +194,7 @@ export class ReadingList extends Component {
   render() {
     // destructures most of state
     const {
+      collections,
       items,
       itemsLoaded,
       totalCount,
@@ -226,7 +234,9 @@ export class ReadingList extends Component {
     // 284 : where the reading list items are actually displayed
     // 294 : button component that allows you to load more reading list items once you have reached the bottom of the page
     // 299 : where the snack bar (floating message) lives on the item
+
     return (
+
       <div className="home item-list">
         <div className="side-bar">
           <div className="widget filters">
@@ -260,7 +270,7 @@ export class ReadingList extends Component {
             <div className="status-view-toggle">
               <a
                 href={READING_LIST_ARCHIVE_PATH}
-                onClick={e => this.toggleStatusView(e)}
+                onClick={() => this.toggleStatusView()}
                 data-no-instant
               >
                 {isStatusViewValid ? 'View Archive' : 'View Reading List'}
@@ -271,6 +281,7 @@ export class ReadingList extends Component {
             key={Date.now()}
             _topLevelWrapper=""
             userTags={availableTags}
+            updateCollection={this.updateCollection}
           />
         </div>
 
@@ -293,8 +304,18 @@ export class ReadingList extends Component {
         </div>
 
         <div className="collections-container">
-          <div className="collections-header">Collections</div>
-            {this.state.collections ? this.state.collections.map(collection => <SingleCollection name={collection.name} /> ) : <SingleCollection name={'Best of JS'} />}
+          <div className="collections-header">Collections ({collections.length})</div>
+            <div className="collection-list">
+            {collections ? collections.map(collection =>
+              <a
+                className="collection-name"
+                href={`/collectionlists/${collection.id}`}
+                data-no-instant
+              >
+                <article className="single-collection-preview">
+                  <h2>{collection.name}</h2>
+                </article></a> ) : <div>No Collections Yet</div>}
+            </div>
           </div>
 
         {snackBar}
@@ -305,9 +326,11 @@ export class ReadingList extends Component {
 // checks the data types of ReadingList's default props or properties
 ReadingList.defaultProps = {
   statusView: STATUS_VIEW_VALID,
+  collections: PropTypes.array,
 };
 // checks the data types of ReadingList's props
 ReadingList.propTypes = {
+  collections: PropTypes.arrayOf(PropTypes.object),
   availableTags: PropTypes.arrayOf(PropTypes.string).isRequired,
   statusView: PropTypes.oneOf([STATUS_VIEW_VALID, STATUS_VIEW_ARCHIVED]),
 };

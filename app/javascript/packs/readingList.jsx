@@ -10,12 +10,13 @@ function loadElement() {
   getUserDataAndCsrfToken().then(({ currentUser }) => {
     // assigns root to the the element that has an id of reading-list
     const root = document.getElementById('reading-list');
+
     // checks to see that there is an element on the document with the reading-list id
     if (root) {
       // if there is, renders the ReadingList component with availableTags(specific to the current user) and statusView passed down as props
       render(
         <ReadingList
-          collections={currentUser.collection_lists}
+          collections={root.dataset.collections}
           availableTags={currentUser.followed_tag_names}
           statusView={root.dataset.view}
         />,

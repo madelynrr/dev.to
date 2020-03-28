@@ -133,6 +133,7 @@ Rails.application.routes.draw do
         get :organizations
         get :podcasts
       end
+
       resources :webhooks, only: %i[index create show destroy]
 
       resources :classified_listings, path: :listings, only: %i[index show create update]
@@ -218,6 +219,7 @@ Rails.application.routes.draw do
   resources :podcasts, only: %i[new create]
   resolve("ProMembership") { [:pro_membership] } # see https://guides.rubyonrails.org/routing.html#using-resolve
 
+  get "/collectionlists/:id", to: "collection_lists#show"
   get "/search/tags" => "search#tags"
   get "/search/chat_channels" => "search#chat_channels"
   get "/chat_channel_memberships/find_by_chat_channel_id" => "chat_channel_memberships#find_by_chat_channel_id"
