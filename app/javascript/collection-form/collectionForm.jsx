@@ -21,7 +21,15 @@ export class CollectionForm extends Component {
 
   createTagArray = tags => {
     const { userTags } = this.props;
-    this.setState({allTags: userTags.concat(tags.map(tag => tag.name))});
+    const allTags = userTags.concat(tags.map(tag => tag.name));
+    let finalTags = allTags.reduce((acc, tag) => {
+      if (!acc.includes(tag)) {
+        acc.push(tag)
+      }
+      return acc;
+    }, []);
+
+    this.setState({allTags: finalTags});
   }
 
   handleChange = event => {
