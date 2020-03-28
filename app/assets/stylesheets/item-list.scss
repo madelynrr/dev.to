@@ -293,6 +293,7 @@
   height: 180px;
   justify-content: center;
   margin: 10px;
+  padding: 10px;
   text-align: center;
   width: 180px;
 
@@ -323,5 +324,28 @@
   &:hover {
     border-radius: 4px;
     background-color: #557de8;
+  }
+}
+
+.single-collection {
+  position: relative;
+}
+
+.delete-collection-btn {
+  background-color: lighten(rgb(102, 226, 213), 10%);
+  border: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  top: 18px;
+  left: 165px;
+  position: absolute;
+  text-align: center;
+  z-index: 3;
+  &:hover {
+    cursor: pointer;
+    background-color: darken($light-gray, 2%);
+    border: solid 1px darken($light-gray, 13%);
+    border-radius: 4px;
+    box-shadow: 0;
   }
 }

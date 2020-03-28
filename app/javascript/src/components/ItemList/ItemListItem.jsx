@@ -8,7 +8,7 @@ export const ItemListItem = ({ item, children }) => {
     path: item.article_path || item.searchable_reactable_path || item.path,
     title: item.article_title || item.searchable_reactable_title || item.title,
     user: item.article_user || item.reactable_user || item.cached_user.table,
-    publishedDate: item.reactable_published_date || 'January 1, 2020',
+    publishedDate: item.reactable_published_date || item.publishedDate,
     visitedDate: item.readable_visited_at,
     readingTime: item.article_reading_time || item.reading_time,
     tags: item.article_tags || item.reactable_tags || item.tag_list,

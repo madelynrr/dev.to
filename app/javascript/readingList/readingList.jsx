@@ -49,7 +49,7 @@ const FilterText = ({ selectedTags, query, value }) => {
 export class ReadingList extends Component {
   constructor(props) {
     super(props);
-    
+
     const { availableTags, statusView, collections } = this.props;
     this.state = defaultState({ availableTags, archiving: false, statusView, collections: []})
     // bind and initialize all shared functions
@@ -140,9 +140,29 @@ export class ReadingList extends Component {
     }, 1000);
   };
 
-  updateCollection = collection => {
-    this.setState({collections: [...this.state.collections, collection]})
+  addCollection = (collections) => {
+    this.setState({collections: collections})
   }
+
+  removeCollection = event => {
+    const deletedCollection = this.state.collections.find(collection => collection.name === event.target.id);
+    const remaining = this.state.collections.filter(collection => collection.name !== deletedCollection.name)
+
+    fetch(`/api/v1/collectionlists/${deletedCollection.id}`, {
+      method: 'DELETE',
+      body: JSON.stringify(deletedCollection.id),
+      headers: {
+        Accept: 'application/json',
+        'X-CSRF-Token': window.csrfToken,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+    })
+      .then(response => response.json())
+      .then(() => this.setState({collections: remaining}))
+      .catch(error => console.log(error));
+  };
+
 
   // returns state's statusView if valid
   statusViewValid() {
@@ -234,7 +254,6 @@ export class ReadingList extends Component {
     // 284 : where the reading list items are actually displayed
     // 294 : button component that allows you to load more reading list items once you have reached the bottom of the page
     // 299 : where the snack bar (floating message) lives on the item
-
     return (
 
       <div className="home item-list">
@@ -281,7 +300,7 @@ export class ReadingList extends Component {
             key={Date.now()}
             _topLevelWrapper=""
             userTags={availableTags}
-            updateCollection={this.updateCollection}
+            addCollection={this.addCollection}
           />
         </div>
 
@@ -307,14 +326,12 @@ export class ReadingList extends Component {
           <div className="collections-header">Collections ({collections.length})</div>
             <div className="collection-list">
             {collections ? collections.map(collection =>
-              <a
-                className="collection-name"
-                href={`/collectionlists/${collection.id}`}
-                data-no-instant
-              >
+              <div className="single-collection">
+                <button className="delete-collection-btn" type="button" id={collection.name} onClick={this.removeCollection}>X</button>
+                <a className="collection-name" href={`/collectionlists/${collection.id}`} data-no-instant>
                 <article className="single-collection-preview">
                   <h2>{collection.name}</h2>
-                </article></a> ) : <div>No Collections Yet</div>}
+                </article></a></div> ) : <div>No Collections Yet</div>}
             </div>
           </div>
 

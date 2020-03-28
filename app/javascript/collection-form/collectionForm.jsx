@@ -29,7 +29,14 @@ export class CollectionForm extends Component {
   };
 
   handleNewTag = event => {
-    this.setState({ collectionTags: [...this.state.collectionTags, event.target.value] });
+    var options = event.target.options;
+    var value = [];
+    for (var i = 0; i < options.length; i++) {
+       if (options[i].selected) {
+         value.push(options[i].value);
+       }
+    }
+    this.setState({ collectionTags: value });
   };
 
   createCollection = event => {
@@ -40,18 +47,18 @@ export class CollectionForm extends Component {
 
   postCollection = collection => {
     this.clearState();
-    fetch(`/api/v1/collectionlists`, {
+    fetch("/api/v1/collectionlists", {
       method: 'POST',
       body: JSON.stringify(collection),
       headers: {
         Accept: 'application/json',
-
         'X-CSRF-Token': window.csrfToken,
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin',
     })
-      .then(response => this.props.updateCollection(collection))
+      .then(response => response.json())
+      .then(collections => this.props.addCollection(collections.collections))
       .catch(error => console.log(error));
   };
 
@@ -95,5 +102,5 @@ export class CollectionForm extends Component {
 
 CollectionForm.propTypes = {
   userTags: PropTypes.arrayOf(PropTypes.string).isRequired,
-  updateCollection: PropTypes.func.isRequired,
+  addCollection: PropTypes.func.isRequired,
 };
