@@ -7,7 +7,10 @@ function loadElement() {
     const root = document.getElementById('collectionlist');
     if (root) {
       render(
-        <CollectionList articles={root.dataset.article_lists} />,
+        <CollectionList
+          articles={root.dataset.article_lists}
+          name={root.dataset.name}
+        />,
         root,
         root.firstElementChild,
       );
