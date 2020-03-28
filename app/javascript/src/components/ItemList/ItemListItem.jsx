@@ -2,7 +2,7 @@
 import { h } from 'preact';
 import { PropTypes } from 'preact-compat';
 // creates functional component ItemListItem with item and children passed down as props
-export const ItemListItem = ({ item, children }) => {
+export const ItemListItem = ({ item, updateReadProperty, children }) => {
   // creates adaptedItem object using information from item prop
   const adaptedItem = {
     path: item.article_path || item.searchable_reactable_path || item.path,
@@ -13,6 +13,7 @@ export const ItemListItem = ({ item, children }) => {
     readingTime: item.article_reading_time || item.reading_time,
     tags: item.article_tags || item.reactable_tags || item.tag_list,
     viewCount: item.page_views_count || 0,
+    read: item.read || false,
   };
 
   // update readingTime to 1 min if the reading time is less than 1 min
@@ -25,12 +26,18 @@ export const ItemListItem = ({ item, children }) => {
   // 40: displays the time it takes to read the item
   // 46: adds a link for each of the item's tags if it has tags
   // 55: displays children - unclear what this represents or how this is updated as it starts off as an empty object
-
   return (
     <div className="item-wrapper">
-      <a className="item" href={adaptedItem.path}>
-        <div className="item-title">{adaptedItem.title}</div>
-
+      <a
+        className="item"
+        href={adaptedItem.path}
+        onClick={() => updateReadProperty(adaptedItem.title)}
+      >
+        <div className="item-title">
+          {adaptedItem.title} 
+          {' '}
+          <span>{adaptedItem.read ? ' (Read)' : ''}</span>
+        </div>
         <div className="item-details">
           <a className="item-user" href={`/${adaptedItem.user.username}`}>
             <img src={adaptedItem.user.profile_image_90} alt="Profile Pic" />
@@ -95,5 +102,6 @@ ItemListItem.defaultProps = {
 ItemListItem.propTypes = {
   item: PropTypes.oneOfType([historyItemPropTypes, readingListItemPropTypes])
     .isRequired,
+  updateReadProperty: PropTypes.func.isRequired,
   children: PropTypes.element,
 };
