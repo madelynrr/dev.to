@@ -29,9 +29,7 @@ export class CollectionForm extends Component {
   };
 
   handleNewTag = event => {
-
     var options = event.target.options;
-
     var value = [];
     for (var i = 0; i < options.length; i++) {
        if (options[i].selected) {
@@ -39,7 +37,6 @@ export class CollectionForm extends Component {
        }
     }
     this.setState({ collectionTags: value });
-    console.log(this.state.collectionTags)
   };
 
   createCollection = event => {
