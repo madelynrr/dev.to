@@ -146,6 +146,7 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       post "/collectionlists", to: "collection_lists#create"
+      delete "/collectionlists/:id", to: "collection_lists#destroy"
     end
   end
 

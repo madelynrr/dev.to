@@ -1,7 +1,9 @@
 class ReadingListItemsController < ApplicationController
   def index
     # index action calling on these helper methods and passing an instance variable set to true to the view (the helper methods are creating an algolia search key, and setting to view to either archived or valid)
-    @collections = current_user.collection_lists.where("created_at >= ?", 1.week.ago.utc).to_json
+
+    @collections = current_user.collection_lists.where("created_at >= ?", 1.week.ago).to_json
+    
     @reading_list_items_index = true
     set_view
     generate_algolia_search_key
