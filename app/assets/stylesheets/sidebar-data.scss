@@ -24,10 +24,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  height: 250px;
   justify-content: center;
-  margin-top: 10px;
+  margin: 10px 0px 0px 10px;
 
   input {
+    font-size: 0.8em;
+    height: 20px !important;
     width: 220px !important;
   }
 }
@@ -42,8 +45,9 @@
   border: var(--theme-container-border, 1px solid #dbdbdb);
   border-radius: 3px;
   box-shadow: none !important;
+  font-size: 0.8em;
   margin-top: 10px;
-  height: 50px;
+  height: 75px;
   width: 220px;
 }
 
