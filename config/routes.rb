@@ -146,6 +146,7 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       post "/collectionlists", to: "collection_lists#create"
+      delete "/collectionlists/:id", to: "collection_lists#destroy"
     end
   end
 
@@ -219,6 +220,7 @@ Rails.application.routes.draw do
   resources :podcasts, only: %i[new create]
   resolve("ProMembership") { [:pro_membership] } # see https://guides.rubyonrails.org/routing.html#using-resolve
 
+  get "/collectionlists/:id", to: "collection_lists#show"
   get "/search/tags" => "search#tags"
   get "/search/chat_channels" => "search#chat_channels"
   get "/chat_channel_memberships/find_by_chat_channel_id" => "chat_channel_memberships#find_by_chat_channel_id"
@@ -416,7 +418,6 @@ Rails.application.routes.draw do
       :constraints => { view: /comments|moderate|admin/ }
   get "/:username/:slug" => "stories#show"
   get "/:username" => "stories#index"
-  get "/collection_lists/:id", to: "collection_lists#show"
 
   root "stories#index"
 end
