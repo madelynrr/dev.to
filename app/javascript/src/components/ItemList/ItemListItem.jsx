@@ -12,6 +12,7 @@ export const ItemListItem = ({ item, children }) => {
     visitedDate: item.readable_visited_at,
     readingTime: item.article_reading_time || item.reading_time,
     tags: item.article_tags || item.reactable_tags || item.tag_list,
+    viewCount: item.page_views_count || 0,
   };
 
   // update readingTime to 1 min if the reading time is less than 1 min
@@ -38,6 +39,7 @@ export const ItemListItem = ({ item, children }) => {
               ? `visited on ${adaptedItem.visitedDate}・`
               : `${adaptedItem.publishedDate}・`}
             {`${adaptedItem.readingTime} min read・`}
+            {`${adaptedItem.viewCount} views・`}
           </a>
 
           {adaptedItem.tags.length > 0 ? (
