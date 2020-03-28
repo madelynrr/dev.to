@@ -4,7 +4,7 @@ import { PropTypes } from 'preact-compat';
 export class CollectionForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { collectionTags: [], allTags: [], title: '' , ready: false};
+    this.state = { collectionTags: [], allTags: [], title: '' , error: '', ready: false};
   }
 
   componentDidMount() {
@@ -34,12 +34,12 @@ export class CollectionForm extends Component {
 
   createCollection = event => {
     event.preventDefault();
+    !this.state.title || !this.state.collectionTags.length ? this.setState({error: 'Please add a title and select tags!'}) :
     this.postCollection({name: this.state.title, tag_list: this.state.collectionTags });
-    this.clearState();
   };
 
   postCollection = collection => {
-    console.log(window.csrfToken)
+    this.clearState();
     fetch(`/api/v1/collectionlists`, {
       method: 'POST',
       body: JSON.stringify(collection),
@@ -51,12 +51,12 @@ export class CollectionForm extends Component {
       },
       credentials: 'same-origin',
     })
-      .then(response => console.log(response))
+      .then(response => this.props.updateCollection(collection))
       .catch(error => console.log(error));
   };
 
   clearState = () => {
-    this.setState({ tags: [], title: '' });
+    this.setState({collectionTags: [], title: '' , error: ''});
   };
 
   render() {
@@ -82,16 +82,18 @@ export class CollectionForm extends Component {
           ))}
         </select>
         <p className="select-multiple-msg">
-          Shift + click to select multiple tags.
+          Command + click to select multiple tags.
         </p>
-        <button id="create-collection-btn" onClick={this.createCollection}>
+        <button type="submit" id="create-collection-btn" onClick={this.createCollection}>
           Create
         </button>
+        <p className="collection-error">{this.state.error}</p>
       </form>
     );
   }
 }
 
 CollectionForm.propTypes = {
-  userTags: PropTypes.array
+  userTags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  updateCollection: PropTypes.func.isRequired,
 };
