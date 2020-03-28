@@ -18,3 +18,9 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+
+# set :output, "/path/to/my/cron_log.log"
+
+every 1.day, at: "11:59 pm" do
+  rake "collection_list_update"
+end
