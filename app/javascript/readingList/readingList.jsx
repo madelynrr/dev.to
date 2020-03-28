@@ -30,7 +30,6 @@ const STATUS_VIEW_ARCHIVED = 'archived';
 // Sets up the two potentail paths for the reading list
 const READING_LIST_ARCHIVE_PATH = '/readinglist/archive';
 const READING_LIST_PATH = '/readinglist';
-// const COLLECTION_PATH = "/collection_lists/:id"
 
 // A functional component called FilterText that has selectedTags, query,
 // and value props passed to it (not known from where), checks for selectedTags and
@@ -356,8 +355,3 @@ FilterText.propTypes = {
   value: PropTypes.string.isRequired,
   query: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
-
-
-// <div className="reading-list-header">
-//   {isStatusViewValid ? 'Reading List' : 'Archive'}
-// </div>

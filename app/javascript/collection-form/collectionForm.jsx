@@ -4,7 +4,7 @@ import { PropTypes } from 'preact-compat';
 export class CollectionForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { collectionTags: [], allTags: [], title: '' , error: '', ready: false};
+    this.state = { collectionTags: [], allTags: [], title: '' , error: '', ready: false };
   }
 
   componentDidMount() {
@@ -28,7 +28,6 @@ export class CollectionForm extends Component {
       }
       return acc;
     }, []);
-
     this.setState({allTags: finalTags});
   }
 
@@ -39,11 +38,11 @@ export class CollectionForm extends Component {
   handleNewTag = event => {
     var options = event.target.options;
     var value = [];
-    for (var i = 0; i < options.length; i++) {
-       if (options[i].selected) {
-         value.push(options[i].value);
+    option.forEach(option => {
+       if (option.selected) {
+         value.push(option.value);
        }
-    }
+    })
     this.setState({ collectionTags: value });
   };
 
