@@ -144,23 +144,24 @@ export class ReadingList extends Component {
     this.setState({collections: collections})
   }
 
-  // removeCollection = event => {
-  //   const deletedCollection = this.state.collections.find(collection => collection.name === event.target.id);
-  //
-  //   fetch(`/api/v1/collectionlists`, {
-  //     method: 'DELETE',
-  //     body: JSON.stringify(deletedCollection),
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'X-CSRF-Token': window.csrfToken,
-  //       'Content-Type': 'application/json',
-  //     },
-  //     credentials: 'same-origin',
-  //   })
-  //     .then(response => response.json())
-  //     .then(remainingCollections => this.setState({collections: remainingCollections}))
-  //     .catch(error => console.log(error));
-  // };
+  removeCollection = event => {
+    const deletedCollection = this.state.collections.find(collection => collection.name === event.target.id);
+    const remaining = this.state.collections.filter(collection => collection.name !== deletedCollection.name)
+
+    fetch(`/api/v1/collectionlists/${deletedCollection.id}`, {
+      method: 'DELETE',
+      body: JSON.stringify(deletedCollection.id),
+      headers: {
+        Accept: 'application/json',
+        'X-CSRF-Token': window.csrfToken,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+    })
+      .then(response => response.json())
+      .then(() => this.setState({collections: remaining}))
+      .catch(error => console.log(error));
+  };
 
 
   // returns state's statusView if valid
@@ -326,7 +327,7 @@ export class ReadingList extends Component {
             <div className="collection-list">
             {collections ? collections.map(collection =>
               <div className="single-collection">
-                <button className="delete-collection-btn" type="delete" id={collection.name} onClick={this.removeCollection}>X</button>
+                <button className="delete-collection-btn" type="button" id={collection.name} onClick={this.removeCollection}>X</button>
                 <a className="collection-name" href={`/collectionlists/${collection.id}`} data-no-instant>
                 <article className="single-collection-preview">
                   <h2>{collection.name}</h2>
