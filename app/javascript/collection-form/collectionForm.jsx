@@ -36,13 +36,13 @@ export class CollectionForm extends Component {
   };
 
   handleNewTag = event => {
-    var options = event.target.options;
-    var value = [];
-    option.forEach(option => {
-       if (option.selected) {
-         value.push(option.value);
-       }
-    })
+    let options = event.target.options;
+    let value = [];
+    for (var i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
     this.setState({ collectionTags: value });
   };
 
