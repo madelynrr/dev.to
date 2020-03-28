@@ -47,7 +47,7 @@ export class CollectionForm extends Component {
 
   postCollection = collection => {
     this.clearState();
-    fetch(`/api/v1/collectionlists`, {
+    fetch("/api/v1/collectionlists", {
       method: 'POST',
       body: JSON.stringify(collection),
       headers: {
