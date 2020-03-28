@@ -1,6 +1,6 @@
-class CollectionListsController < ApplicationRecord
+class CollectionListsController < ApplicationController
   def show
     collection = CollectionList.find(params[:id])
-    @articles = collection.articles.to_json
+    @articles = collection.articles.includes([:taggings]).to_json
   end
 end
