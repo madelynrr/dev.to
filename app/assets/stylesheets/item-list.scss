@@ -7,9 +7,6 @@
   }
 
   .filters {
-    // width: 300px;
-    // float: left;
-    // min-height: 356px;
     position: relative;
 
     input {
@@ -302,5 +299,29 @@
   &:hover {
     cursor: pointer;
     background-color: darken(rgb(102, 226, 213), 10%);
+  }
+}
+
+.collection-list-page {
+  margin-left: 7%;
+  height: 800px !important;
+  overflow: visible !important;
+}
+
+.collection-back-btn {
+  background-color: white;
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: black;
+  font-size: 1em;
+  font-weight: bold;
+  height: 30px;
+  padding-top: 10px;
+  text-align: center;
+  width: 120px;
+  &:hover {
+    border-radius: 4px;
+    background-color: #557de8;
   }
 }
