@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, "/var/spool/cron/crontabs"
+# set :output, "/var/spool/cron/crontabs"
 
 every 1.day, at: "11:59 pm" do
   rake "collection_list_update"
