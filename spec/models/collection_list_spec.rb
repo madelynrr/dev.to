@@ -14,12 +14,12 @@ RSpec.describe CollectionList do
   describe "Methods" do
 
       before do
-        @a1 = create(:article, page_views_count: 2, tags: ['java', 'react', 'sql']) #should be in list
+        @a1 = create(:article,  created_at: 2.days.ago, page_views_count: 2, tags: ['java', 'react', 'sql']) #should be in list
         @a6 = create(:article, page_views_count: 1, tags: ['java', 'react', 'sql']) #should be in list
         @a2 = create(:article, tags: ['ruby', 'react', 'postgress']) #should not be list
-        @a3 = create(:article, page_views_count: 4, tags: ['javascript', 'rails', 'sql']) #should be in list
+        @a3 = create(:article, created_at: 1.day.ago, page_views_count: 4, tags: ['javascript', 'rails', 'sql']) #should be in list
         @a4 = create(:article, tags: ['graphql', 'react', 'sql']) #should not be list
-        @a5 = create(:article, created_at: 'Fri, 27 Jan 2020 19:21:25 SAST +02:00,', tags: ['java', 'react', 'sql']) #should not be list
+        @a5 = create(:article, created_at: 1.month.ago, tags: ['java', 'react', 'sql']) #should not be list
         @user = create(:user)
         @collection = @user.collection_lists.create(name: "Hello Java", tag_list: ['java', 'rails'])
       end

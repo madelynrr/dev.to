@@ -2,6 +2,7 @@ class Api::V1::CollectionListsController < ApplicationController
   def create
     collection = current_user.collection_lists.create(collection_list_params)
     if collection.save
+
       articles = collection.find_articles
       collection.articles << articles
       render json: { collections: current_user.collection_lists.where("created_at >= ?", 1.week.ago) }
