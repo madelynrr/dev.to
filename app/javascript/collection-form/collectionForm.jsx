@@ -4,7 +4,7 @@ import { PropTypes } from 'preact-compat';
 export class CollectionForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { collectionTags: [], allTags: [], title: '' , ready: false};
+    this.state = { collectionTags: [], allTags: [], title: '' , error: '', ready: false};
   }
 
   componentDidMount() {
@@ -34,12 +34,12 @@ export class CollectionForm extends Component {
 
   createCollection = event => {
     event.preventDefault();
+    !this.state.title || !this.state.collectionTags.length ? this.setState({error: 'Please add a title and select tags!'}) :
     this.postCollection({name: this.state.title, tag_list: this.state.collectionTags });
-    this.clearState();
   };
 
   postCollection = collection => {
-    console.log(window.csrfToken)
+    this.clearState();
     fetch(`/api/v1/collectionlists`, {
       method: 'POST',
       body: JSON.stringify(collection),
@@ -56,7 +56,7 @@ export class CollectionForm extends Component {
   };
 
   clearState = () => {
-    this.setState({ tags: [], title: '' });
+    this.setState({collectionTags: [], title: '' , error: ''});
   };
 
   render() {
@@ -87,6 +87,7 @@ export class CollectionForm extends Component {
         <button id="create-collection-btn" onClick={this.createCollection}>
           Create
         </button>
+        <p className="collection-error">{this.state.error}</p>
       </form>
     );
   }
