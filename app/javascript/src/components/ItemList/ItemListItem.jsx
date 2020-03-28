@@ -5,13 +5,13 @@ import { PropTypes } from 'preact-compat';
 export const ItemListItem = ({ item, children }) => {
   // creates adaptedItem object using information from item prop
   const adaptedItem = {
-    path: item.article_path || item.searchable_reactable_path,
-    title: item.article_title || item.searchable_reactable_title,
-    user: item.article_user || item.reactable_user,
-    publishedDate: item.reactable_published_date,
+    path: item.article_path || item.searchable_reactable_path || item.path,
+    title: item.article_title || item.searchable_reactable_title || item.title,
+    user: item.article_user || item.reactable_user || item.cached_user.table,
+    publishedDate: item.reactable_published_date || 'January 1, 2020',
     visitedDate: item.readable_visited_at,
     readingTime: item.article_reading_time || item.reading_time,
-    tags: item.article_tags || item.reactable_tags,
+    tags: item.article_tags || item.reactable_tags || item.tag_list,
   };
 
   // update readingTime to 1 min if the reading time is less than 1 min
@@ -24,6 +24,8 @@ export const ItemListItem = ({ item, children }) => {
   // 40: displays the time it takes to read the item
   // 46: adds a link for each of the item's tags if it has tags
   // 55: displays children - unclear what this represents or how this is updated as it starts off as an empty object
+
+  console.log(adaptedItem);
   return (
     <div className="item-wrapper">
       <a className="item" href={adaptedItem.path}>
