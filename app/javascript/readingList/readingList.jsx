@@ -6,7 +6,6 @@ import { PropTypes } from 'preact-compat';
 // Imports debounce gto improve browser performance
 import debounce from 'lodash.debounce';
 import { CollectionForm } from '../collection-form/collectionForm';
-// import { Collections } from '../collections/collections';
 
 
 // Imports several functions from the searchableItemsList File
