@@ -21,6 +21,15 @@
 
 # set :output, "/var/spool/cron/crontabs"
 
-every 1.day, at: "11:59 pm" do
-  rake "collection_list_update"
-end
+# every 1.day, at: "11:59 pm" do
+#   rake "collection_list_update"
+# end
+
+# article_updater:
+#   cron: "*/1 * * * *" #it will retrieve data every 1 minute
+#   class: "CollectionListWorker"
+
+my_first_job:
+  cron: "*/1 * * * *"
+  class: "HardWorker"
+  queue: hard_worker
