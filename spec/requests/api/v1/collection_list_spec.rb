@@ -25,5 +25,20 @@ RSpec.describe API do
       expect(data["collections"].first["name"]).to eq("Javascript")
       expect(data["collections"].first["tag_list"]).to eq(article.tag_list)
     end
+
+    it "can destroy a collection list" do
+      article = Article.first
+
+      params = { name: "Javascript",
+                 tag_list: article.tag_list }
+
+      post "/api/v1/collectionlists", params: params
+      expect(CollectionList.count).to eq(1)
+
+      collection = CollectionList.first
+      delete "/api/v1/collectionlists/#{collection.id}"
+      expect(response).to be_successful
+      expect(CollectionList.count).to eq(0)
+    end
   end
 end
