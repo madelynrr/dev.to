@@ -25,7 +25,6 @@ export const ItemListItem = ({ item, children }) => {
   // 46: adds a link for each of the item's tags if it has tags
   // 55: displays children - unclear what this represents or how this is updated as it starts off as an empty object
 
-  console.log(adaptedItem);
   return (
     <div className="item-wrapper">
       <a className="item" href={adaptedItem.path}>
